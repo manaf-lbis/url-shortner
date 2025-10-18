@@ -1,21 +1,11 @@
-import UrlShortenerForm from "../components/URLShortnerForm"
-import Navbar from "../components/Navbar"
+import UrlShortenerForm from "../components/URLShortnerForm.js"
+import Navbar from "../components/Navbar.js"
 import { Link2, MousePointerClick, Sparkles } from "lucide-react"
-import StatsRow from "../components/StatsRow"
+import StatsRow from '../components/StatsRow.js'
 
 export default function HomePage() {
   return (
-    <main
-      style={{
-        "--primary": "oklch(0.58 0.18 148)",
-        "--primary-foreground": "oklch(0.99 0 0)",
-        "--accent": "oklch(0.97 0.03 148)", 
-        "--accent-foreground": "oklch(0.19 0.03 148)", 
-        "--background": "oklch(0.99 0 0)", 
-        "--foreground": "oklch(0.19 0.03 148)",
-      }}
-      className="min-h-dvh bg-background text-foreground flex flex-col"
-    >
+    <main className="min-h-dvh bg-background text-foreground flex flex-col">
       <Navbar />
 
       <section className="relative flex-1 overflow-hidden bg-gradient-to-b from-emerald-950 via-emerald-900 to-emerald-800">

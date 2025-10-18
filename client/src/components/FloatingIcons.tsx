@@ -1,7 +1,7 @@
 import { Stars, MousePointerClick, ShieldCheck, Link2 } from "lucide-react"
 
 export default function FloatingIcons() {
-  const item = (key, style, Icon, className) => (
+  const item = (key:any, style:any, Icon:any, className:any) => (
     <div
       key={key}
       aria-hidden
