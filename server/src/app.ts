@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import appRouter from "./router/appRoute"
 import errorHandler from "./middleware/errorHandler";
+import authRouter from "./router/authRoute";
 
 
 
@@ -12,8 +13,11 @@ dotenv.config();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+
+
+app.use("/auth", authRouter);
 app.use("/", appRouter);
-app.use("/auth", appRouter);
+
 
 
 
