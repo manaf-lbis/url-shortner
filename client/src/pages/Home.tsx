@@ -1,5 +1,5 @@
 import UrlShortenerForm from "../components/URLShortnerForm.js"
-import Navbar from "../components/Navbar.js"
+import {Navbar} from "../components/Navbar.js"
 import { Link2, MousePointerClick, Sparkles } from "lucide-react"
 import StatsRow from '../components/StatsRow.js'
 

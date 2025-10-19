@@ -1,16 +1,23 @@
 import express from "express";
+import dotenv from "dotenv";
+import appRouter from "./router/appRoute"
+import errorHandler from "./middleware/errorHandler";
+
+
 
 const app = express();
+dotenv.config();
+
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.use("/", appRouter);
+app.use("/auth", appRouter);
 
 
 
-
-
-app.get("/", (req, res) => {
-  res.send("Hello, TypeScript + ESM + Express!");
-});
-
-
+app.use(errorHandler);
 
 
 const port = process.env.PORT
