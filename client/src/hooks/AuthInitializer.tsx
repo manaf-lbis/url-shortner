@@ -7,6 +7,8 @@ import type { RootState } from "../store/store";
 export default function AuthInitializer({ children }: { children: React.ReactNode }) {
     const dispatch = useDispatch();
     const { isAuthenticated, loading } = useSelector((state: RootState) => state.auth);
+    console.log(!isAuthenticated);
+    
     const { data, error, isLoading } = useValidateUserQuery(undefined, {
         skip: !isAuthenticated,
     });
