@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { Menu } from "lucide-react"
-import DashboardSidebar from "../components/DashboardSidebar"
+import {DashboardSidebar} from "../components/DashboardSidebar"
 import DashboardStats from "../components/DashboardStats"
 import LinksList from "../components/LinksLists"
 import DashboardShortener from "../components/DashboardShortnerForm"

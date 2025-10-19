@@ -1,9 +1,8 @@
-import React from "react";
 import { useValidateUserQuery } from "../api/authApi";
 import { useNavigate } from "react-router-dom";
 
 
-export const NavigationGuard = ({ children }: { children: React.ReactNode }) => {
+export const NavigationGuard = () => {
 
     const navigate = useNavigate()
 
@@ -16,7 +15,4 @@ export const NavigationGuard = ({ children }: { children: React.ReactNode }) => 
     }
 
 
-
-
-    return <>{children}</>;
 }
