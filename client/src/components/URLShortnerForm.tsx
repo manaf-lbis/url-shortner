@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import ShinyButton from "./ShinyButton";
 import { ExternalLink } from "lucide-react";
+import { useShortenUrlMutation } from "../api/appApi";
 
 export default function UrlShortenerForm() {
   const [input, setInput] = useState("");
@@ -8,10 +9,7 @@ export default function UrlShortenerForm() {
   const [error, setError] = useState("");
   const [copied, setCopied] = useState(false);
   const [loading, setLoading] = useState(false);
-  const base =
-    typeof window !== "undefined"
-      ? window.location.origin
-      : "https://example.com";
+  const [shortenUrl, { isLoading }] = useShortenUrlMutation();
 
   const isValidUrl = useMemo(() => {
     if (!input) return true;
@@ -25,15 +23,6 @@ export default function UrlShortenerForm() {
 
   const invalid = !!input && !isValidUrl;
 
-  function makeCode(len = 6) {
-    const chars =
-      "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    let out = "";
-    for (let i = 0; i < len; i++)
-      out += chars[Math.floor(Math.random() * chars.length)];
-    return out;
-  }
-
   async function pasteFromClipboard() {
     try {
       const txt = await navigator.clipboard.readText();
@@ -43,28 +32,28 @@ export default function UrlShortenerForm() {
     }
   }
 
-  async function onSubmit(e) {
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError("");
     setCopied(false);
+    setLoading(true);
 
     if (!input) {
       setError("Please paste a URL to shorten.");
+      setLoading(false);
       return;
     }
     if (!isValidUrl) {
       setError("That doesn't look like a valid URL.");
+      setLoading(false);
       return;
     }
 
-    setLoading(true);
     try {
-      const code = makeCode();
-      const generated = `${base}/${code}`;
-      await new Promise((r) => setTimeout(r, 300));
-      setShortUrl(generated);
-    } catch {
-      setError("Something went wrong. Please try again.");
+      const response = await shortenUrl({ url: input }).unwrap();
+      setShortUrl(`${import.meta.env.VITE_BASE_APP_URL}/${response.data.shortcode}`);
+    } catch (error: any) {
+      setError(error?.data?.message || "Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -83,11 +72,10 @@ export default function UrlShortenerForm() {
 
   return (
     <div>
-      <form onSubmit={onSubmit} className="flex flex-col gap-3 " noValidate>
+      <form onSubmit={onSubmit} className="flex flex-col gap-3" noValidate>
         <label htmlFor="url-input" className="sr-only">
           Paste URL
         </label>
-
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-[1fr_auto]">
           <input
             id="url-input"
@@ -111,12 +99,11 @@ export default function UrlShortenerForm() {
             size="lg"
             color="green"
             className="w-full sm:w-auto"
-            disabled={loading}
+            disabled={loading || isLoading}
           >
-            {loading ? "Shortening…" : "Shorten URL"}
+            {loading || isLoading ? "Shortening…" : "Shorten URL"}
           </ShinyButton>
         </div>
-
         <div className="flex items-start justify-between gap-2">
           <p id="url-help" className="text-xs text-muted-foreground">
             Include http:// or https://
@@ -129,10 +116,7 @@ export default function UrlShortenerForm() {
             Paste
           </button>
         </div>
-
-     
       </form>
-
 
       {(invalid || error) && (
         <div className="mt-2 rounded-md bg-red-50 border border-red-300 p-2 text-sm text-red-700">
@@ -140,8 +124,8 @@ export default function UrlShortenerForm() {
         </div>
       )}
 
-      <div className="mt-4" aria-live="polite">
-        {shortUrl ? (
+      {shortUrl && (
+        <div className="mt-4" aria-live="polite">
           <div className="flex flex-col gap-2 rounded-md border border-border bg-accent/50 p-3 sm:flex-row sm:items-center sm:gap-3 bg-green-50 border-green-300">
             <div className="min-w-0 flex-1">
               <p className="truncate text-sm font-medium text-accent-foreground">
@@ -153,23 +137,24 @@ export default function UrlShortenerForm() {
                 href={shortUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center rounded-md border border-input  px-3 py-2 text-xs font-medium text-foreground hover:bg-muted border-green-300 bg-green-50"
+                className="inline-flex items-center justify-center rounded-md border border-input px-3 py-2 text-xs font-medium text-foreground hover:bg-muted border-green-300 bg-green-50"
               >
-                 Open
-                <ExternalLink className="h-4 w-4 ml-2"/>
+                Open
+                <ExternalLink className="h-4 w-4 ml-2" />
               </a>
               <ShinyButton
                 type="button"
                 size="sm"
                 color="green"
                 onClick={onCopy}
+                disabled={isLoading}
               >
                 {copied ? "Copied!" : "Copy"}
               </ShinyButton>
             </div>
           </div>
-        ) : null}
-      </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -2,6 +2,7 @@ import { LayoutDashboard, Link2, LogOut, SpaceIcon } from "lucide-react";
 import { useLogoutMutation } from "../api/authApi"
 import { logout } from "../slices/authSlice";
 import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 
 
 interface DashboardSidebarProps {
@@ -30,15 +31,19 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ activeTab, s
     return (
         <aside className="w-64 bg-gradient-to-b from-emerald-950 to-emerald-900 text-white flex flex-col h-screen md:h-full shadow-lg">
             <div className="p-6 border-b border-emerald-700/50">
-                <div className="flex items-center gap-3">
-                    <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center flex-shrink-0">
-                        <Link2 className="h-6 w-6 text-white" />
+                <Link to="/">
+                    <div className="flex items-center gap-3">
+                        <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center flex-shrink-0">
+                            <Link2 className="h-6 w-6 text-white" />
+                        </div>
+
+                        <div className="min-w-0">
+                            <h2 className="text-lg font-bold text-white truncate">GreenLink</h2>
+                            <p className="text-xs text-emerald-200">Link Manager</p>
+                        </div>
+
                     </div>
-                    <div className="min-w-0">
-                        <h2 className="text-lg font-bold text-white truncate">GreenLink</h2>
-                        <p className="text-xs text-emerald-200">Link Manager</p>
-                    </div>
-                </div>
+                </Link>
             </div>
 
             <nav className="flex-1 space-y-2 p-4 overflow-y-auto">
