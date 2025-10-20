@@ -13,4 +13,8 @@ export class UserRepository extends BaseRepository<IUser> implements IUserReposi
         return UserModel.findOne({ email });
     }
 
+    async userscount(): Promise<number> {
+        return await UserModel.countDocuments();
+    }
+
 }

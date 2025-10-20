@@ -7,6 +7,7 @@ import DashboardPage from "../pages/Dashboard";
 import { ProtectedLayout } from "./ProtectedLayout";
 import { PublicLayout } from "./PublicLayout";
 import AuthInitializer from "../hooks/AuthInitializer";
+import LinkAccessPage from "../pages/LinkAccessPage";
 
 export const AppRoute = () => {
   return (
@@ -24,6 +25,9 @@ export const AppRoute = () => {
         <Route element={<ProtectedLayout />}>
           <Route path="/dashboard" element={<DashboardPage />} />
         </Route>
+        <Route path="/:id" element={<LinkAccessPage />} />
+
+
       </Routes>
     </AuthInitializer>
   );

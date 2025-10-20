@@ -4,10 +4,12 @@ import {DashboardSidebar} from "../components/DashboardSidebar"
 import DashboardStats from "../components/DashboardStats"
 import LinksList from "../components/LinksLists"
 import DashboardShortener from "../components/DashboardShortnerForm"
+import { useGetDashboardQuery } from "../api/appApi"
 
 export default function DashboardPage() {
     const [activeTab, setActiveTab] = useState("dashboard")
     const [sidebarOpen, setSidebarOpen] = useState(false)
+    const { data } = useGetDashboardQuery({})
 
     return (
         <main className="min-h-dvh bg-white text-emerald-950 flex flex-col">
@@ -60,7 +62,7 @@ export default function DashboardPage() {
                                 </div>
 
                                 <div className="order-3">
-                                    <DashboardStats />
+                                    <DashboardStats  statsData={data?.data} />
                                 </div>
                             </div>
                         ) : (

@@ -1,10 +1,20 @@
-import { Link2, MousePointerClick, TrendingUp } from "lucide-react"
+import { Link2, MousePointerClick, TrendingUp } from "lucide-react";
 
-export default function DashboardStats() {
-  const stats = [
+interface StatsData {
+  totalLinks: number;
+  totalClicks: number;
+  AvgClicks: number;
+}
+
+interface StatCardProps {
+  statsData?: StatsData;
+}
+
+const DashboardStats: React.FC<StatCardProps> = ({ statsData }) => {
+  const statss = [
     {
       label: "Your Links",
-      value: "12",
+      value: statsData?.totalLinks?.toString() || "0",
       description: "Total shortened links created",
       icon: Link2,
       bgColor: "bg-emerald-50",
@@ -13,7 +23,7 @@ export default function DashboardStats() {
     },
     {
       label: "Total Clicks",
-      value: "1,234",
+      value: statsData?.totalClicks?.toString() || "0",
       description: "Clicks across all your links",
       icon: MousePointerClick,
       bgColor: "bg-blue-50",
@@ -22,19 +32,19 @@ export default function DashboardStats() {
     },
     {
       label: "Avg. Clicks/Link",
-      value: "102.8",
+      value: statsData?.AvgClicks?.toFixed(2)?.toString() || "0",
       description: "Average engagement per link",
       icon: TrendingUp,
       bgColor: "bg-purple-50",
       textColor: "text-purple-700",
       iconBg: "bg-purple-100",
     },
-  ]
+  ];
 
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-      {stats.map((stat, idx) => {
-        const Icon = stat.icon
+      {statss.map((stat, idx) => {
+        const Icon = stat.icon;
 
         return (
           <div
@@ -52,8 +62,10 @@ export default function DashboardStats() {
             </div>
             <p className="text-xs text-gray-600">{stat.description}</p>
           </div>
-        )
+        );
       })}
     </div>
-  )
-}
+  );
+};
+
+export default DashboardStats;

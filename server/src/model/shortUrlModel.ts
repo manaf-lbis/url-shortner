@@ -3,6 +3,9 @@ import { IShortUrl } from "../types/shortUrl";
 
 
 const shortUrlSchema = new Schema<IShortUrl>({
+    title:{
+        type:String,
+    },
     userId:{
         type:Schema.Types.ObjectId,
         ref:"User",

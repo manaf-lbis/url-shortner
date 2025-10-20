@@ -2,7 +2,7 @@ import type React from "react"
 import { useState, useEffect } from "react"
 import ShinyButton from "./ShinyButton"
 import { Mail, Lock, AlertCircle, CheckCircle } from "lucide-react"
-import { Link, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../api/authApi";
 import { useDispatch } from "react-redux";
 import { setUser } from "../slices/authSlice";
@@ -133,9 +133,9 @@ export default function AuthForm({ type, testCredentials }: AuthFormProps) {
 
       {type === "login" && (
         <div className="text-center">
-          <Link to="/forgot-password" className="text-sm text-emerald-600 hover:text-emerald-700 transition">
+          {/* <Link to="/forgot-password" className="text-sm text-emerald-600 hover:text-emerald-700 transition">
             Forgot password?
-          </Link>
+          </Link> */}
         </div>
       )}
     </form>

@@ -14,7 +14,7 @@ export async function generateUniqueShortCode(length: number = 6): Promise<strin
       .substring(0, length);
 
     const existing = await shortUrlRepository.findByShortCode(code);
-    if (!existing) isDuplicate = false;
+    if (!existing?.length) isDuplicate = false;
   }
 
   return code!;

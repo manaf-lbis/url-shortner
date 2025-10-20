@@ -2,6 +2,7 @@ import { useState, useMemo } from "react";
 import ShinyButton from "./ShinyButton";
 import { ExternalLink } from "lucide-react";
 import { useShortenUrlMutation } from "../api/appApi";
+import { useNavigate } from "react-router-dom";
 
 export default function UrlShortenerForm() {
   const [input, setInput] = useState("");
@@ -10,6 +11,7 @@ export default function UrlShortenerForm() {
   const [copied, setCopied] = useState(false);
   const [loading, setLoading] = useState(false);
   const [shortenUrl, { isLoading }] = useShortenUrlMutation();
+  const navigate = useNavigate();
 
   const isValidUrl = useMemo(() => {
     if (!input) return true;
@@ -54,6 +56,9 @@ export default function UrlShortenerForm() {
       setShortUrl(`${import.meta.env.VITE_BASE_APP_URL}/${response.data.shortcode}`);
     } catch (error: any) {
       setError(error?.data?.message || "Something went wrong. Please try again.");
+      if(error?.status === 401){
+        navigate("/login");
+      }
     } finally {
       setLoading(false);
     }

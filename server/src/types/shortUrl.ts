@@ -1,6 +1,8 @@
 import { Document, Types } from "mongoose";
 
 export interface IShortUrl extends Document{
+    _id: Types.ObjectId;
+    title: string;
     userId:Types.ObjectId;
     originalUrl: string;
     shortCode: string;

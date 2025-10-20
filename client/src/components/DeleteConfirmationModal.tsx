@@ -4,7 +4,7 @@ import { X, AlertTriangle } from "lucide-react"
 interface DeleteConfirmationModalProps {
   link: {
     id: string
-    name: string
+    title: string
     shortCode: string,
     originalUrl: string
   }
@@ -35,7 +35,7 @@ export const DeleteConfirmationModal:React.FC<DeleteConfirmationModalProps> = ({
             <p className="text-sm text-emerald-950 font-medium mb-2">Are you sure you want to delete this link?</p>
             <div className="rounded-lg bg-emerald-50 border border-emerald-200 p-3 space-y-2">
               <p className="text-xs text-emerald-600">
-                <span className="font-medium">Name:</span> {link.name || "Untitled"}
+                <span className="font-medium">Name:</span> {link.title || "Untitled"}
               </p>
               <p className="text-xs text-emerald-600 truncate">
                 <span className="font-medium">URL:</span> {link.originalUrl}
@@ -72,3 +72,6 @@ export const DeleteConfirmationModal:React.FC<DeleteConfirmationModalProps> = ({
     </div>
   )
 }
+
+
+

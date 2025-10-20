@@ -27,7 +27,6 @@ export class AuthController {
 
     async signup(req: Request, res: Response, next: NextFunction) {
         try {
-            console.log('here');
             
             const { email, password } = req.body;
             if (!email.trim() || !password.trim()) throw new ApiError("Email and password are required", null);
