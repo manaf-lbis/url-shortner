@@ -4,11 +4,15 @@ import appRouter from "./router/appRoute"
 import errorHandler from "./middleware/errorHandler";
 import authRouter from "./router/authRoute";
 import cors from "cors";
+import { connectDB } from "./config/db";
+import cookieParser from "cookie-parser";
 
 
+
+dotenv.config();
 
 const app = express();
-dotenv.config();
+connectDB();
 
 app.use(cors({
   origin: process.env.CLIENT_URL,
@@ -16,7 +20,7 @@ app.use(cors({
   credentials: true,
 }));
 
-
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

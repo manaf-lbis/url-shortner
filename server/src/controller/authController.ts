@@ -2,19 +2,23 @@ import { NextFunction, Request, Response } from "express";
 import { IAuthService } from "../services/interface/IAuthService";
 import { sendSuccess } from "../utils/apiSuccess";
 import ApiError from "../utils/apiError";
+import { verifyToken } from "../utils/token";
 
 export class AuthController {
 
     constructor(
         private _authService: IAuthService
-    ){}
+    ) { }
 
     async login(req: Request, res: Response, next: NextFunction) {
         try {
             const { email, password } = req.body;
-            if(!email.trim() || !password.trim()) throw new ApiError("Email and password are required",null);
+            if (!email.trim() || !password.trim()) throw new ApiError("Email and password are required", null);
             const user = await this._authService.login(email, password);
-            sendSuccess(res,{email:'email@gmail.com'},"Login successful");
+
+            res.cookie("token",user.accessToken)
+
+            sendSuccess(res, user, "Login successful");
 
         } catch (error) {
             next(error);
@@ -23,9 +27,36 @@ export class AuthController {
 
     async signup(req: Request, res: Response, next: NextFunction) {
         try {
+            console.log('here');
+            
             const { email, password } = req.body;
+            if (!email.trim() || !password.trim()) throw new ApiError("Email and password are required", null);
+
             const user = await this._authService.signup(email, password);
-            sendSuccess(res,user,"Signup successful");
+
+            res.cookie("signupToken",user.signupToken)
+
+            sendSuccess(res, user, "Signup successful");
+
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async verifySignupOtp(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { email, otp } = req.body;
+            if (!otp?.trim() || otp.length !== 6) throw new ApiError("Email and OTP are required", null);
+
+            const signupToken = req.cookies.signupToken;
+            if (!signupToken) throw new ApiError("Invalid signup Attempt Try Again", null);
+        
+            const response = await this._authService.verifySignupOtp(otp.trim(), signupToken);
+
+            res.clearCookie("signupToken");
+            res.cookie("token",response.accessToken)
+
+            sendSuccess(res, {}, "OTP verified successfully");
 
         } catch (error) {
             next(error);
@@ -34,8 +65,16 @@ export class AuthController {
 
     async validateToken(req: Request, res: Response, next: NextFunction) {
         try {
-            sendSuccess(res,{},"Token is valid");
+            sendSuccess(res, {}, "Session is valid");
+        } catch (error) {
+            next(error);
+        }
+    }
 
+    async logout(req: Request, res: Response, next: NextFunction) {
+        try {
+            res.clearCookie("token");
+            sendSuccess(res, {}, "Logout successful");
         } catch (error) {
             next(error);
         }

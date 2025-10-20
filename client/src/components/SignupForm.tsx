@@ -3,6 +3,10 @@ import { useState } from "react"
 import ShinyButton from "./ShinyButton"
 import { Mail, Lock, AlertCircle, CheckCircle } from "lucide-react"
 import OtpInput from "./OtpInput"
+import { useSignupMutation, useVerifySignupOtpMutation } from "../api/authApi"
+import { useDispatch } from "react-redux"
+import { useNavigate } from "react-router-dom"
+import { setUser } from "../slices/authSlice"
 
 export default function SignupForm() {
   const [step, setStep] = useState<"credentials" | "otp">("credentials")
@@ -12,7 +16,11 @@ export default function SignupForm() {
   const [otp, setOtp] = useState("")
   const [error, setError] = useState("")
   const [success, setSuccess] = useState("")
-  const [loading, setLoading] = useState(false)
+  const [signup, { isLoading: signupLoading }] = useSignupMutation()
+  const [verifySignupOtp, { isLoading: verifySignupOtpLoading }] = useVerifySignupOtpMutation()
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+
 
   const validateEmail = (email: string) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -49,12 +57,14 @@ export default function SignupForm() {
       return
     }
 
-    setLoading(true)
-    setTimeout(() => {
-      setLoading(false)
+    try {
+      await signup({ email, password }).unwrap()
       setSuccess("OTP sent to your email")
       setStep("otp")
-    }, 1500)
+    } catch (error:any) {
+      setError(`${error.data?.message || "An error occurred. Please try again."}`)
+    }
+
   }
 
   const handleOtpSubmit = async (e: React.FormEvent) => {
@@ -67,14 +77,16 @@ export default function SignupForm() {
       return
     }
 
-    setLoading(true)
-    setTimeout(() => {
-      setLoading(false)
+    try {
+      const response = await verifySignupOtp({otp}).unwrap()
       setSuccess("Account created successfully! Redirecting to login...")
-      setTimeout(() => {
-        window.location.href = "/login"
-      }, 1500)
-    }, 1500)
+      dispatch(setUser(response.user));
+      navigate("/dashboard");
+       
+    } catch (error:any) {
+      setError(`${error.data?.message || "An error occurred. Please try again."}`)
+    }
+
   }
 
   const handleResend = () => {
@@ -182,8 +194,8 @@ export default function SignupForm() {
       )}
 
       {/* Submit Button */}
-      <ShinyButton type="submit" size="md" color="green" disabled={loading} className="w-full mt-6">
-        {loading ? "Processing..." : step === "credentials" ? "Continue" : "Verify OTP"}
+      <ShinyButton type="submit" size="md" color="green" disabled={verifySignupOtpLoading || signupLoading} className="w-full mt-6">
+        {verifySignupOtpLoading || signupLoading ? "Processing..." : step === "credentials" ? "Continue" : "Verify OTP"}
       </ShinyButton>
     </form>
   )

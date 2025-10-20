@@ -3,7 +3,7 @@ import { useState, useEffect } from "react"
 import ShinyButton from "./ShinyButton"
 import { Mail, Lock, AlertCircle, CheckCircle } from "lucide-react"
 import { Link, useNavigate } from "react-router-dom";
-import { useLoginMutation, useSignupMutation } from "../api/authApi";
+import { useLoginMutation } from "../api/authApi";
 import { useDispatch } from "react-redux";
 import { setUser } from "../slices/authSlice";
 
@@ -21,7 +21,6 @@ export default function AuthForm({ type, testCredentials }: AuthFormProps) {
   const [success, setSuccess] = useState("")
   const navigate = useNavigate()
   const [login, { isLoading: loginLoading }] = useLoginMutation()
-  const [signup, { isLoading: signupLoading }] = useSignupMutation()
 
   useEffect(() => {
     if (testCredentials) {
@@ -42,16 +41,13 @@ export default function AuthForm({ type, testCredentials }: AuthFormProps) {
     if (!password) return setError("Password is required")
     if (password.length < 6) return setError("Password must be at least 6 characters")
     if (type === "signup" && password !== confirmPassword) return setError("Passwords do not match")
-
+      
 
     try {
       let response: any;
       if (type === "login") {
         response = await login({ email, password }).unwrap();
-
-      } else {
-        response = await signup({ email, password }).unwrap();
-      }
+      } 
       dispatch(setUser(response.user));
       navigate("/dashboard");
 
@@ -131,8 +127,8 @@ export default function AuthForm({ type, testCredentials }: AuthFormProps) {
         </div>
       )}
 
-      <ShinyButton type="submit" size="md" color="green" disabled={loginLoading || signupLoading} className="w-full mt-6">
-        {loginLoading || signupLoading ? "Processing..." : type === "login" ? "Sign in" : "Create account"}
+      <ShinyButton type="submit" size="md" color="green" disabled={loginLoading } className="w-full mt-6">
+        {loginLoading ? "Processing..." : type === "login" ? "Sign in" : "Create account"}
       </ShinyButton>
 
       {type === "login" && (

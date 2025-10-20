@@ -9,5 +9,8 @@ export class UserRepository extends BaseRepository<IUser> implements IUserReposi
         super(UserModel)
     };
 
+    async findByEmail(email: string): Promise<IUser | null> {
+        return UserModel.findOne({ email });
+    }
 
 }
