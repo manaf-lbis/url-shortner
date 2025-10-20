@@ -1,18 +1,22 @@
 import type React from "react"
 import { useRef, useState, useEffect } from "react"
 import { RotateCcw } from "lucide-react"
+import { useResentOtpMutation } from "../api/authApi"
 
 interface OtpInputProps {
   value: string
   onChange: (value: string) => void
   email?: string
-  onResend?: () => void
+  onResend?: () => void,
+  onError: (error: string) => void
 }
 
-export default function OtpInput({ value, onChange, email, onResend }: OtpInputProps) {
+export default function OtpInput({ value, onChange, email, onResend, onError }: OtpInputProps) {
   const inputRefs = useRef<(HTMLInputElement | null)[]>([])
   const [timeLeft, setTimeLeft] = useState(30)
   const [canResend, setCanResend] = useState(false)
+  const [resendOtp, { isLoading }] = useResentOtpMutation()
+
 
   useEffect(() => {
     if (timeLeft <= 0) {
@@ -47,12 +51,19 @@ export default function OtpInput({ value, onChange, email, onResend }: OtpInputP
     }
   }
 
-  const handleResend = () => {
-    setTimeLeft(30)
-    setCanResend(false)
-    onChange("")
-    if (onResend) {
-      onResend()
+  const handleResend = async () => {
+
+    try {
+      await resendOtp(email).unwrap()
+      setTimeLeft(30)
+      setCanResend(false)
+      onChange("")
+
+      if (onResend) {
+        onResend()
+      }
+    } catch (error:any) {
+      onError(`${error.data?.message || "An error occurred. Please try again."}`)
     }
   }
 
@@ -97,6 +108,7 @@ export default function OtpInput({ value, onChange, email, onResend }: OtpInputP
             onClick={handleResend}
             className="flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-600 hover:bg-emerald-100 hover:border-emerald-300 transition group relative"
             title="Resend OTP"
+            disabled={isLoading}
           >
             <RotateCcw className="h-4 w-4 group-hover:rotate-180 transition-transform duration-300" />
             <span className="text-sm font-medium">Resend OTP</span>

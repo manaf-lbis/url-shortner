@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React from "react"
 import { Users, Link2, MousePointerClick } from "lucide-react"
 
@@ -6,8 +5,8 @@ function useCountUp(to = 0, duration = 1200) {
   const [value, setValue] = React.useState(0)
   React.useEffect(() => {
     const start = performance.now()
-    let raf
-    const step = (t) => {
+    let raf: number
+    const step = (t: number) => {
       const p = Math.min(1, (t - start) / duration)
       setValue(Math.floor(p * to))
       if (p < 1) raf = requestAnimationFrame(step)
@@ -18,7 +17,7 @@ function useCountUp(to = 0, duration = 1200) {
   return value
 }
 
-const StatCard = ({label, value, icon:Icon }) => (
+const StatCard = ({label, value, icon:Icon }:{label:string, value:number, icon:any}) => (
   <li className="rounded-xl border border-white/10 bg-white/5 p-4 backdrop-blur text-white">
     <div className="flex items-center gap-3">
       <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-400/15 text-emerald-200">
@@ -32,10 +31,18 @@ const StatCard = ({label, value, icon:Icon }) => (
   </li>
 )
 
-export default function StatsRow() {
-  const users = useCountUp(12300, 1100)
-  const links = useCountUp(89700, 1300)
-  const clicks = useCountUp(1200000, 1500)
+interface StatsRowProps {
+  stats: {
+    totalUsers: number,
+    totalLinks: number,
+    totalClicks: number
+  }
+}
+
+const  StatsRow:React.FC<StatsRowProps> = ({stats}) => {
+  const users = useCountUp(stats?.totalUsers)
+  const links = useCountUp(stats?.totalLinks) 
+  const clicks = useCountUp(stats?.totalClicks)
 
   return (
     <ul className="mx-auto mt-8 grid w-full max-w-3xl grid-cols-3 gap-3">
@@ -45,3 +52,5 @@ export default function StatsRow() {
     </ul>
   )
 }
+
+export default StatsRow

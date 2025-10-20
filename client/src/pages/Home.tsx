@@ -2,8 +2,10 @@ import UrlShortenerForm from "../components/URLShortnerForm.js"
 import {Navbar} from "../components/Navbar.js"
 import { Link2, MousePointerClick, Sparkles } from "lucide-react"
 import StatsRow from '../components/StatsRow.js'
+import { useGetHomeQuery } from "../api/appApi.js"
 
 export default function HomePage() {
+  const {data} = useGetHomeQuery({})
   return (
     <main className="min-h-dvh bg-background text-foreground flex flex-col">
       <Navbar />
@@ -43,7 +45,7 @@ export default function HomePage() {
               </div>
             </div>
 
-            <StatsRow />
+            <StatsRow stats={data?.data} />
           </div>
         </div>
       </section>
