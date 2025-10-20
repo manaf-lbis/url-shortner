@@ -13,8 +13,9 @@ export const AppRoute = () => {
 
     <AuthInitializer>
       <Routes>
+        <Route path="/" element={<HomePage />} />
+
         <Route element={<PublicLayout />}>
-          <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />

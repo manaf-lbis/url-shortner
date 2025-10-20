@@ -54,7 +54,7 @@ export const authApi = createApi({
             query: (email) => ({
                 url: "/auth/resent-otp",
                 method: "POST",
-                body: email,
+                body: {email},
             }),
         }),
 

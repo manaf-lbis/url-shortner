@@ -18,7 +18,7 @@ export class AuthController {
 
             res.cookie("token",user.accessToken)
 
-            sendSuccess(res, user, "Login successful");
+            sendSuccess(res, null, "Login successful");
 
         } catch (error) {
             next(error);
@@ -75,6 +75,21 @@ export class AuthController {
         try {
             res.clearCookie("token");
             sendSuccess(res, {}, "Logout successful");
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async resentOtp(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { email } = req.body;
+            const token = req.cookies.signupToken;
+            if (!email.trim()) throw new ApiError("Email is required", null);
+            const user = await this._authService.resendOtp(email,token);
+
+            res.cookie("signupToken",user.signupToken)
+
+            sendSuccess(res, null, "OTP resent successfully");
         } catch (error) {
             next(error);
         }

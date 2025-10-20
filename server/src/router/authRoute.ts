@@ -19,6 +19,7 @@ router.post("/verify-otp",authController.verifySignupOtp.bind(authController));
 router.post("/login",authController.login.bind(authController));
 router.get("/validate",authentication,authController.validateToken.bind(authController));
 router.post("/logout",authController.logout.bind(authController));
+router.post("/resent-otp",authController.resentOtp.bind(authController));
 
 
 

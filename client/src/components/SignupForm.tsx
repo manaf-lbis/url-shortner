@@ -3,7 +3,7 @@ import { useState } from "react"
 import ShinyButton from "./ShinyButton"
 import { Mail, Lock, AlertCircle, CheckCircle } from "lucide-react"
 import OtpInput from "./OtpInput"
-import { useSignupMutation, useVerifySignupOtpMutation } from "../api/authApi"
+import {  useSignupMutation, useVerifySignupOtpMutation } from "../api/authApi"
 import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { setUser } from "../slices/authSlice"
@@ -88,6 +88,10 @@ export default function SignupForm() {
     }
 
   }
+  
+  const onResendError = (error: string) => {
+    setError(error)
+  }
 
   const handleResend = () => {
     setError("")
@@ -158,7 +162,7 @@ export default function SignupForm() {
             <label htmlFor="otp" className="block text-sm font-medium text-emerald-950 mb-2">
               Enter 6-digit OTP
             </label>
-            <OtpInput value={otp} onChange={setOtp} email={email} onResend={handleResend} />
+            <OtpInput onError={onResendError} value={otp} onChange={setOtp} email={email} onResend={handleResend} />
           </div>
 
           {/* Resend OTP */}
