@@ -75,13 +75,7 @@ export const appApi = createApi({
                 method: "GET",
             }),
         })
-
-
-
     })
-
-
-
 })
 
 export const {

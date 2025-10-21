@@ -58,7 +58,6 @@ export default function AuthForm({ type, testCredentials }: AuthFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      {/* Email */}
       <div>
         <label htmlFor="email" className="block text-sm font-medium text-emerald-950 mb-2">
           Email address
@@ -76,7 +75,6 @@ export default function AuthForm({ type, testCredentials }: AuthFormProps) {
         </div>
       </div>
 
-      {/* Password */}
       <div>
         <label htmlFor="password" className="block text-sm font-medium text-emerald-950 mb-2">
           Password
@@ -113,7 +111,6 @@ export default function AuthForm({ type, testCredentials }: AuthFormProps) {
         </div>
       )}
 
-      {/* Error or success messages */}
       {error && (
         <div className="flex items-center gap-2 p-3 rounded-lg bg-red-50 border border-red-200">
           <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0" />
