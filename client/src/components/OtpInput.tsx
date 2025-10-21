@@ -76,7 +76,6 @@ export default function OtpInput({ value, onChange, email, onResend, onError }: 
         </div>
       )}
 
-      {/* OTP Input Fields */}
       <div className="flex gap-2 justify-center">
         {Array.from({ length: 6 }).map((_, index) => (
           <input

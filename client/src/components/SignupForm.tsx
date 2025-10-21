@@ -120,7 +120,6 @@ export default function SignupForm() {
             </div>
           </div>
 
-          {/* Password */}
           <div>
             <label htmlFor="password" className="block text-sm font-medium text-emerald-950 mb-2">
               Password
@@ -138,7 +137,6 @@ export default function SignupForm() {
             </div>
           </div>
 
-          {/* Confirm Password */}
           <div>
             <label htmlFor="confirmPassword" className="block text-sm font-medium text-emerald-950 mb-2">
               Confirm password
@@ -165,7 +163,6 @@ export default function SignupForm() {
             <OtpInput onError={onResendError} value={otp} onChange={setOtp} email={email} onResend={handleResend} />
           </div>
 
-          {/* Resend OTP */}
           <div className="text-center">
             <button
               type="button"
@@ -181,7 +178,6 @@ export default function SignupForm() {
         </>
       )}
 
-      {/* Error Message */}
       {error && (
         <div className="flex items-center gap-2 p-3 rounded-lg bg-red-50 border border-red-200">
           <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0" />
@@ -189,7 +185,6 @@ export default function SignupForm() {
         </div>
       )}
 
-      {/* Success Message */}
       {success && (
         <div className="flex items-center gap-2 p-3 rounded-lg bg-emerald-50 border border-emerald-200">
           <CheckCircle className="h-5 w-5 text-emerald-600 flex-shrink-0" />
@@ -197,7 +192,6 @@ export default function SignupForm() {
         </div>
       )}
 
-      {/* Submit Button */}
       <ShinyButton type="submit" size="md" color="green" disabled={verifySignupOtpLoading || signupLoading} className="w-full mt-6">
         {verifySignupOtpLoading || signupLoading ? "Processing..." : step === "credentials" ? "Continue" : "Verify OTP"}
       </ShinyButton>

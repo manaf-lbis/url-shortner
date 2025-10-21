@@ -4,20 +4,18 @@ import { appApi } from "../api/appApi";
 import authReducer from "../slices/authSlice";
 
 
-export const store  = configureStore({
+export const store = configureStore({
   reducer: {
     auth: authReducer,
 
     [authApi.reducerPath]: authApi.reducer,
     [appApi.reducerPath]: appApi.reducer,
-
   },
 
-  middleware : (getDefaultMiddleware) =>{
+  middleware: (getDefaultMiddleware) => {
     return getDefaultMiddleware().concat(
       authApi.middleware,
       appApi.middleware
-        
     )
   }
 
