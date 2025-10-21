@@ -47,7 +47,7 @@ export class UrlShortService implements IUrlShortService {
         return {
             totalUsers: users,
             totalLinks: stats.totalLinks,
-            totalClicks: 0
+            totalClicks: stats.totalClicks
         }
     }
 
