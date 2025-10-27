@@ -73,9 +73,15 @@ export class ShortUrlRepository extends BaseRepository<IShortUrl> implements ISh
         }
     }
 
-    resolveUrl(shortcode: string): Promise<IShortUrl | null> {
-        return ShortUrlModel.findOneAndUpdate({ shortCode: shortcode }, { $inc: { clicksCount: 1 } });
+    async resolveUrl(shortcode: string): Promise<IShortUrl | null> {
+        return await ShortUrlModel.findOneAndUpdate({ shortCode: shortcode }, { $inc: { clicksCount: 1 } });
     }
+
+    async urlExistForUser(userId: Types.ObjectId, url: string): Promise<any | null> {
+        return await ShortUrlModel.find({userId,originalUrl:url})
+    }
+
+
 
 
 }

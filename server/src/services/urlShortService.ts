@@ -4,6 +4,8 @@ import { generateUniqueShortCode } from "../utils/shortCodeGenerator";
 import { IUrlShortService } from "./interface/IUrlShortService";
 import { IUserRepository } from "../repository/interface/IUserRepository";
 import ApiError from "../utils/apiError";
+import { StatusCodes } from "../types/statusCodes";
+import { validateUrl } from "../utils/urlValidator";
 
 export class UrlShortService implements IUrlShortService {
     constructor(
@@ -26,6 +28,15 @@ export class UrlShortService implements IUrlShortService {
     }
 
     async shortenUrl(url: string, userId: Types.ObjectId): Promise<{ shortcode: string }> {
+
+        const isValid = await validateUrl(url);
+
+        if(!isValid.valid) throw new ApiError(isValid.reason,null)
+
+        const isUrlExists = await this._shortUrlRepository.urlExistForUser(userId,url)
+        
+
+        if(isUrlExists.length) throw new ApiError('This URL is Already shorten Check the created links',null,StatusCodes.BAD_REQUEST)
 
         const shortCode = await generateUniqueShortCode();
 
