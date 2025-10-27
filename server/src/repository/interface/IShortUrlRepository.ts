@@ -9,5 +9,6 @@ export interface IShortUrlRepository extends IBaseRepository<IShortUrl> {
     dashboardStats(userId: Types.ObjectId): Promise<{ totalLinks: number; totalClicks: number; AvgClicks: number; }>
     generatedLinks(userId: Types.ObjectId): Promise<any>
     resolveUrl(shortcode: string): Promise<IShortUrl | null>
+    urlExistForUser(userId:Types.ObjectId,url:string):Promise<any|null>
 
 }
